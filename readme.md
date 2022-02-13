@@ -1,6 +1,10 @@
 ![Squiggle Wordmark](img/squiggle-blue-long.png)
 
 ---
+
+**NOTE: Squiggle is currently in preview mode - docs are incomplete and being actively added to. That said, there should be enough below to get started. The code of Squiggle itself is stable and used in production games.**
+
+---
   
 Squiggle ("**S**uper **Q**uick **G**ame **L**anguage") is a simple scripting language and runtime parser built for use inside of any C# game engine or framework (Unity, Monogame, etc.). With very little setup, you can easily get started adding custom dialog scripts and commands to your game.
 
