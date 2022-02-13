@@ -4,12 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Sprache" Version="2.3.1" />
+  </ItemGroup>
+
   <Target Name="CopyDLLs" AfterTargets="Build">
     <Message Text="Executing CopyDLLs task" Importance="High" />
 
-    <Copy
-      SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb"
-      DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
+    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb" DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
 
     <Message Text="Copied build files" Importance="High" />
   </Target>

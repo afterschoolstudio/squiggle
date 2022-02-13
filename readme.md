@@ -1,5 +1,7 @@
-# Squiggle
+![Squiggle Wordmark](img/squiggle-blue.png)
 
+---
+  
 Squiggle ("**S**uper **Q**uick **G**ame **L**anguage") is a simple scripting language (and runtime parser) built for use inside of any C# game engine or framework (Unity, Monogame, etc.). With minimal setup, you easily start authoring custom dialog and commands for use in your game.
 
 Here's an example:
