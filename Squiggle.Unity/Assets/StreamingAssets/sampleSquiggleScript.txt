@@ -1,0 +1,4 @@
+Speaker: Hello from StreamingAssets!
+[wait 1000]
+Speaker: I just waited 1 second until I said this.
+Speaker: Now the runner will exit
