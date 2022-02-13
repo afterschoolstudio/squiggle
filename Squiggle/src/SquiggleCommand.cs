@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Squiggle.Commands
 {
     public abstract class Command
     {
         public Action CommandExecutionComplete;
-        public virtual async void Execute()
+        public virtual void Execute()
         {
             CommandExecutionComplete?.Invoke();
         }
@@ -17,9 +18,15 @@ namespace Squiggle.Commands
     public class SquiggleCommand : Command
     {
         public string[] Args;
+        public string Parsed = "";
         public SquiggleCommand(string[] args)
         {
             Args = args;
+            Parsed = "";
+            for (int i = 0; i < Args.Length; i++)
+            {
+                Parsed += $"({i}){Args[i]} ";
+            }
         }
 
         public SquiggleCommand GetCommand()
@@ -30,9 +37,11 @@ namespace Squiggle.Commands
             }
             else
             {
-                var options = typeof(SquiggleCommand).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(SquiggleCommand)) && !t.IsAbstract);
+                //should cache this so we only do it once
+                var options = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes().Where(t => t.IsSubclassOf(typeof(SquiggleCommand)) && !t.IsAbstract));
                 foreach (var opt in options)
                 {
+                    Console.WriteLine("found squiggle type " +opt.Name);
                     var attr = (SquiggleCommandAttribute) Attribute.GetCustomAttribute(opt, typeof (SquiggleCommandAttribute)); 
                     if(attr != null)
                     {

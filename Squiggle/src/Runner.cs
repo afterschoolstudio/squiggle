@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Squiggle.Commands;
+using Squiggle.Events;
 
 namespace Squiggle
 {
@@ -10,10 +11,25 @@ namespace Squiggle
         List<SquiggleCommand> commands;
         SquiggleCommand workingCommand;
         Options options;
-        public Runner(List<SquiggleCommand> commands, Options opts)
+        string GUID;
+
+        public Action BeganExecution;
+        public Action CompletedExecution;
+        public Action<SquiggleCommand> CommandExecutionStarted;
+        public Action<SquiggleCommand> CommandExecutionCompleted;
+        Action<Squiggle.Commands.Dialog,Squiggle.Commands.Dialog.Data> DialogHandler;
+        public Runner(List<SquiggleCommand> commands, Options opts, Action<Squiggle.Commands.Dialog,Squiggle.Commands.Dialog.Data> dialogHandler = null)
         {
+            GUID = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             this.commands = commands;
             options = opts;
+            DialogHandler = dialogHandler;
+            if(DialogHandler == null)
+            {
+                DialogHandler = (command,data) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);};
+            }
+            Squiggle.Events.Dialog.EmitDialog += DialogHandler;
+            
             if(opts.AutoStart)
             {
                 Start();
@@ -22,16 +38,21 @@ namespace Squiggle
 
         public void Start()
         {
+            Log($"Beginning Runner Execution With {commands.Count} Commands");
+            BeganExecution?.Invoke();
             workingCommand = commands.FirstOrDefault();
             if(workingCommand == null)
             {
+                Log($"No Commands Found, Exiting Runner");
                 //empty list, end the runner
-                Events.Runner.CompletedExecution?.Invoke();
+                Cleanup();
+                CompletedExecution?.Invoke();
             }
             else
             {
                 workingCommand.CommandExecutionComplete += OnCurrentCommandComplete;
-                Events.Commands.CommandExecutionStarted?.Invoke(workingCommand);
+                Log($"Starting Execution for Command Type {workingCommand.GetType().Name} With Args: {workingCommand.Parsed}");
+                CommandExecutionStarted?.Invoke(workingCommand);
                 workingCommand.Execute();
             }
         }
@@ -41,14 +62,17 @@ namespace Squiggle
             var commandIndex = commands.IndexOf(workingCommand);
             if(commandIndex == commands.Count - 1)
             {
+                Log($"Execution Complete, Exiting");
                 //we're at the end of the list, end the runner
-                Events.Runner.CompletedExecution?.Invoke();
+                Cleanup();
+                CompletedExecution?.Invoke();
             }
             else
             {
                 //grab the next command
                 workingCommand = commands[commandIndex+1];
                 workingCommand.CommandExecutionComplete += OnCurrentCommandComplete;
+                Log($"Starting Execution for Command Type {workingCommand.GetType().Name} With Args: {workingCommand.Parsed}");
                 //execute the command
                 workingCommand.Execute();
             }
@@ -56,17 +80,30 @@ namespace Squiggle
 
         void OnCurrentCommandComplete()
         {
+            Log($"Completed Execution for Command Type {workingCommand.GetType().Name} With Args: {workingCommand.Parsed}");
             workingCommand.CommandExecutionComplete -= OnCurrentCommandComplete;
-            Events.Commands.CommandExecutionCompleted?.Invoke(workingCommand);
+            CommandExecutionCompleted?.Invoke(workingCommand);
             TryExecuteNextCommand();
         }
 
         public void Cleanup()
         {
+            if(DialogHandler != null)
+            {
+                Squiggle.Events.Dialog.EmitDialog -= DialogHandler;
+            }
             foreach (var command in commands)
             {
                 workingCommand.CommandExecutionComplete -= OnCurrentCommandComplete;
                 workingCommand.Cleanup();
+            }
+        }
+
+        void Log(string text)
+        {
+            if(options.Debug)
+            {
+                Console.WriteLine($"Squiggle Runner {GUID}: {text}");
             }
         }
 

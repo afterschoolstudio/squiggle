@@ -1,5 +1,6 @@
 using System;
-using System.Threading.Tasks;
+using System.Threading;
+using Squiggle.Events;
 
 namespace Squiggle.Commands
 {
@@ -21,35 +22,35 @@ namespace Squiggle.Commands
                 Text = dialog
             };
         }
-        public override async void Execute()
+        public override void Execute()
         {
-            Events.Commands.Dialog.EmitDialog?.Invoke(this,DialogData);
-            Events.Commands.Dialog.CompleteDialog += OnDialogComplete;
+            Squiggle.Events.Commands.CompleteDialog += OnDialogComplete;
+            Squiggle.Events.Dialog.EmitDialog?.Invoke(this,DialogData);
         }
 
         void OnDialogComplete(Dialog dialogCommand)
         {
             if(dialogCommand == this)
             {
-                Events.Commands.Dialog.CompleteDialog -= OnDialogComplete;
+                Squiggle.Events.Commands.CompleteDialog -= OnDialogComplete;
                 CommandExecutionComplete?.Invoke();
             }
         }
         public override void Cleanup()
         {
-            Events.Commands.Dialog.CompleteDialog -= OnDialogComplete;
+            Squiggle.Events.Commands.CompleteDialog -= OnDialogComplete;
         }
         
     }
 
     [SquiggleCommand("timer")]
-    public class StartAudioInstanceCommand : SquiggleCommand
+    public class Timer : SquiggleCommand
     {
         public int WaitMS => Int32.Parse(Args[1]);
-        public StartAudioInstanceCommand(string[] args) : base(args){}
-        public override async void Execute()
+        public Timer(string[] args) : base(args){}
+        public override void Execute()
         {
-            await Task.Delay(WaitMS);
+            Thread.Sleep(WaitMS);
             CommandExecutionComplete?.Invoke();
         }
     }

@@ -2,16 +2,40 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- copy nuget packages to bin -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ILRepack.MSBuild.Task" Version="2.0.13" PrivateAssets="All"/>
     <PackageReference Include="Sprache" Version="2.3.1" />
   </ItemGroup>
+
+  <!-- https://www.phillipsj.net/posts/using-ilrepack-with-dotnet-core-sdk-and-dotnet-standard/ -->
+  <!-- <Target Name="ILRepack" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'"> -->
+  <!-- <Target Name="ILRepack" AfterTargets="Build">
+    <PropertyGroup>
+      <WorkingDirectory>$(MSBuildThisFileDirectory)bin\$(Configuration)\$(TargetFramework)</WorkingDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <InputAssemblies Include="Squiggle.dll" />
+      <InputAssemblies Include="Sprache.dll" />
+    </ItemGroup>
+    <Message Text="MERGING: @(InputAssemblies->'%(Filename)') into $(OutputAssembly)" Importance="High" />
+    <ILRepack
+      OutputType="$(OutputType)"
+      MainAssembly="$(AssemblyName).dll"
+      OutputAssembly="$(AssemblyName).dll"
+      InputAssemblies="@(InputAssemblies)"
+      InternalizeExcludeAssemblies="@(InternalizeExcludeAssemblies)"
+      WorkingDirectory="$(WorkingDirectory)" />
+  </Target>   -->
 
   <Target Name="CopyDLLs" AfterTargets="Build">
     <Message Text="Executing CopyDLLs task" Importance="High" />
 
-    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb" DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
+    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;" DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
+    <Copy SourceFiles="$(TargetDir)Sprache.dll;" DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
 
     <Message Text="Copied build files" Importance="High" />
   </Target>

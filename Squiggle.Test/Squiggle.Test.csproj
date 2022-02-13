@@ -11,6 +11,9 @@
     <Reference Include="Squiggle">
         <HintPath>$(ProjectDir)Squiggle.dll</HintPath>
     </Reference>
+    <Reference Include="Sprache">
+        <HintPath>$(ProjectDir)Sprache.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 

@@ -4,7 +4,7 @@ using Sprache;
 
 namespace Squiggle
 {
-    public static class Squiggle
+    public static class Core
     {
         public static SquiggleCommandGroup Parse(string squiggleText)
         {
