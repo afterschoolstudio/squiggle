@@ -22,7 +22,7 @@ namespace Squiggle.Parser
             from introLines in LineEnd.Many()
             from commands in Parse.Ref(()=>SpeakerText).XOr(Parse.Ref(() => Instruction)).Many()
             from outroLines in LineEnd.Many()
-            select new SquiggleCommandGroup(commands);
+            select new SquiggleCommandGroup(commands.ToList());
 		public static readonly Parser<string> CommandParameter = 
                 (from content in Parse.CharExcept(' ').Until(Parse.LineTerminator).Text()
                 select content).Token();

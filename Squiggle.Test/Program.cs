@@ -18,7 +18,6 @@ Squiggle.Core.Run(testScript,new Squiggle.Runner.Options(){Debug = true});
 public class SampleCustom : SquiggleCommand
 {
     [Arg(1)] public string LogText;
-    // public SampleCustom(string[] args) : base(args){}
     public override void Execute()
     {
         Console.WriteLine($"you passed the arg: {LogText} to your custom command");
