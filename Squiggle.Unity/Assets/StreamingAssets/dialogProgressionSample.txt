@@ -1,0 +1,4 @@
+Speaker: Hello from StreamingAssets! I'll wait until you press next to continue.
+Speaker: I'll wait until you press next to continue
+Speaker: And when you press next I'll show you some more
+Speaker: Now when you press next I'll exit

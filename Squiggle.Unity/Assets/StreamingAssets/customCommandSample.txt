@@ -1,0 +1,6 @@
+Speaker: Hello from StreamingAssets! I'll wait until you press next to continue.
+Speaker: When you press next, this text will change to yellow
+[setTextColor yellow]
+Speaker: When you press next, this text will change to green
+[setTextColor green]
+Speaker: When you press next, this text will exit.

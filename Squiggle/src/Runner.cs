@@ -49,20 +49,16 @@ namespace Squiggle
                 CommandExecutionStarted?.Invoke(workingCommand);
                 if(!(workingCommand is Wait))
                 {
-                    Log("executing non wait command");
                     workingCommand.Execute();
                 }
                 else
                 {
-                    Log("checking for wait override");
                     if(options.WaitOverride == null)
                     {
-                        Log("no wait override found");
                         workingCommand.Execute();
                     }
                     else
                     {
-                        Log("found wait override, invoking");
                         options.WaitOverride?.Invoke(workingCommand as Wait);
                     }
                 }
@@ -88,20 +84,16 @@ namespace Squiggle
                 //execute the command
                 if(!(workingCommand is Wait))
                 {
-                    Log("executing non wait command");
                     workingCommand.Execute();
                 }
                 else
                 {
-                    Log("checking for wait override");
                     if(options.WaitOverride == null)
                     {
-                        Log("no wait override found");
                         workingCommand.Execute();
                     }
                     else
                     {
-                        Log("found wait override, invoking");
                         options.WaitOverride?.Invoke(workingCommand as Wait);
                     }
                 }

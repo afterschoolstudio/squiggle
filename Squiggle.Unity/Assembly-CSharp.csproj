@@ -36,9 +36,17 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Squiggle\Sample Scenes\ScriptableObject\ScriptableObjectSample.cs" />
-     <Compile Include="Assets\Squiggle\Sample Scenes\ScriptableObject\SquiggleScriptableObject.cs" />
-     <Compile Include="Assets\Squiggle\Sample Scenes\TextBox\SquiggleTextBoxSample.cs" />
+     <Compile Include="Assets\Squiggle\Common\SquiggleUnityRunner.cs" />
+     <Compile Include="Assets\Squiggle\Common\SquiggleUtils.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\1 - Monobehaviour\SquiggleMonobehaviourSample.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\2 -TextBox\SquiggleTextBoxSample.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\3 - ScriptableObject\ScriptableObjectSample.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\3 - ScriptableObject\SquiggleScriptableObject.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\4 - StreamingAssetsSample\SquiggleStreamingAssetsSample.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\5 - DialogProgressionSample\SquiggleDialogProgressionSample.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\6 - CustomCommand\SquiggleCustomCommandSample.cs" />
+     <None Include="Assets\StreamingAssets\dialogProgressionSample.txt" />
+     <None Include="Assets\StreamingAssets\customCommandSample.txt" />
      <None Include="Assets\StreamingAssets\sampleSquiggleScript.txt" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.8f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

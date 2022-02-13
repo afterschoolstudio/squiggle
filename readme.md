@@ -41,6 +41,8 @@ You'll find four example scenes in the project, each demonstrating a different w
 * Monobehaviour - Write squiggle in a public monobeahvior string field
 * Scriptable Object - Author squiggle in a ScriptableObject
 * Streaming Assets - Load a squiggle file from StreamingAssets
+* Dialog Progression - Show how to progress a squiggle script manually
+* Custom Commands - Sample custom command that changes text color
 
 ## Absolute Basics
 
