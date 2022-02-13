@@ -34,8 +34,13 @@
   <Target Name="CopyDLLs" AfterTargets="Build">
     <Message Text="Executing CopyDLLs task" Importance="High" />
 
+    <!-- Copy into dotnet test project -->
     <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;" DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
     <Copy SourceFiles="$(TargetDir)Sprache.dll;" DestinationFolder="$(ProjectDir)../Squiggle.Test/" />
+    
+    <!-- Copy into Unity samples project -->
+    <Copy SourceFiles="$(TargetDir)$(ProjectName).dll;" DestinationFolder="$(ProjectDir)../Squiggle.Unity/Assets/Squiggle/Plugins" />
+    <Copy SourceFiles="$(TargetDir)Sprache.dll;" DestinationFolder="$(ProjectDir)../Squiggle.Unity/Assets/Squiggle/Plugins" />
 
     <Message Text="Copied build files" Importance="High" />
   </Target>

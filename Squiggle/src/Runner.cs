@@ -17,18 +17,12 @@ namespace Squiggle
         public Action CompletedExecution;
         public Action<SquiggleCommand> CommandExecutionStarted;
         public Action<SquiggleCommand> CommandExecutionCompleted;
-        Action<Squiggle.Commands.Dialog> DialogHandler;
-        public Runner(List<SquiggleCommand> commands, Options runnerOptions, Action<Squiggle.Commands.Dialog> dialogHandler = null)
+        public Runner(List<SquiggleCommand> commands, Options runnerOptions)
         {
             GUID = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             this.commands = commands;
             options = runnerOptions;
-            DialogHandler = dialogHandler;
-            if(DialogHandler == null)
-            {
-                DialogHandler = (command) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);};
-            }
-            Squiggle.Events.Dialog.EmitDialog += DialogHandler;
+            Squiggle.Events.Dialog.EmitDialog += options.DialogHandler;
             
             if(runnerOptions.AutoStart)
             {
@@ -88,10 +82,7 @@ namespace Squiggle
 
         public void Cleanup()
         {
-            if(DialogHandler != null)
-            {
-                Squiggle.Events.Dialog.EmitDialog -= DialogHandler;
-            }
+            Squiggle.Events.Dialog.EmitDialog -= options.DialogHandler;
             foreach (var command in commands)
             {
                 workingCommand.CommandExecutionComplete -= OnCurrentCommandComplete;
@@ -101,9 +92,14 @@ namespace Squiggle
 
         void Log(string text)
         {
+            var logtext = $"Squiggle Runner {GUID}: {text}";
             if(options.Debug)
             {
-                Console.WriteLine($"Squiggle Runner {GUID}: {text}");
+                Console.WriteLine(logtext);
+                if(options.LogHandler != null)
+                {
+                    options.LogHandler?.Invoke(logtext);
+                }
             }
         }
 
@@ -111,6 +107,8 @@ namespace Squiggle
         {
             public bool AutoStart = true;
             public bool Debug = false;
+            public Action<Squiggle.Commands.Dialog> DialogHandler = (command) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);};
+            public Action<string> LogHandler = null;
         }
     }
 }

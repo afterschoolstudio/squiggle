@@ -19,6 +19,7 @@ Final: And Now I'm Here
 string myScript = "Speaker: Hello! The Speaker is talking!";
 Squiggle.Core.Run(  squiggleText : myScript,
                     runnerOptions : new Squiggle.Runner.Options(){Debug = true});
+                    
 [SquiggleCommand("sampleCustom")]
 public class SampleCustom : SquiggleCommand
 {

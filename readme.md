@@ -59,41 +59,61 @@ Squiggle.Core.Run(myScript);
 ```
 The above code will read the text in `myScript` as Squiggle code and attempt to execute it. Squiggle will see that someone name `Speaker` is talking, and they are saying `Hello! The Speaker is talking!`.
 
-If you use the above code, the code will run and then immediately exit. This may not be desireable, as you'll likely want to "catch" the dialog, and handle it somewhere else in your code. You can specify a dialog callback with the `dialogHandler` parameter to handle dialog when running Squiggle code to achieve this:
+### Runner Options / Printing to Console
+Squiggle is "silent" by default, meaning if you run the above code, especially in Unity, it can seem like its not working. To get baseline "visibility", you can pass options to the Runner:
 
 ```cs
 using Squiggle;
 
 string myScript = "Speaker: Hello! The Speaker is talking!";
 Squiggle.Core.Run(  squiggleText : myScript,
-                    dialogHandler : (command) => {
-                        // This will automatically complete the dialog
-                        Squiggle.Events.Commands.CompleteDialog?.Invoke(command);
+                    runnerOptions : new Squiggle.Runner.Options(){
+                        Debug = true
                     });
 ```
 
-The above code will still immediately "complete" the dialog, but you can see how you could instead call out to other functions to process the dialog, then call `Squiggle.Events.Commands.CompleteDialog?.Invoke(command)` elsewhere when finished (like when a player presses the "advance" button in a dialog UI).
+The above code will now print debug information that looks like this to the console (NOTE: Unity users need to do a second step, see below):
 
-You can see more robust examples like this in the Unity package sample scenes.
-
-## Runner Options
-You may want to debug your Squiggle execution when you are first getting setup. Squiggle provides an easy route to do this by specifying `runnerOptions` when you execute Squiggle and setting the `Debug` value to `true`:
-
-```cs
-using Squiggle;
-
-string myScript = "Speaker: Hello! The Speaker is talking!";
-Squiggle.Core.Run(  squiggleText : myScript,
-                    runnerOptions : new Squiggle.Runner.Options(){Debug = true});
-```
-
-This will print something similar to this in the console:
 ```
 Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Beginning Runner Execution With 1 Commands
 Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Starting Execution for Command Type Dialog With Args: (0)Speaker (1)Hello! The Speaker is talking!  
 Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Completed Execution for Command Type Dialog With Args: (0)Speaker (1)Hello! The Speaker is talking! 
 Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Execution Complete, Exiting
 ```
+
+**If you're using Unity, you'll also need to specify a logging callback function in the options**:
+
+```cs
+using Squiggle;
+
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(  squiggleText : myScript,
+                    runnerOptions : new Squiggle.Runner.Options(){
+                        Debug = true,
+                        LogHandler = (text) => Debug.Log(text)
+                    });
+```
+
+If you use the above code, the code will run and then immediately exit. This may not be desireable, as you'll likely want to "catch" the dialog, and handle it somewhere else in your code. You can specify a dialog callback with the `DialogHandler` parameter to handle dialog when running Squiggle code to achieve this:
+
+```cs
+using Squiggle;
+
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(  squiggleText : myScript,
+                    runnerOptions : new Squiggle.Runner.Options(){
+                        Debug = true,
+                        LogHandler = (text) => {Debug.Log(text)},
+                        DialogHandler : (command) => {
+                            // This will automatically complete the dialog
+                            Squiggle.Events.Commands.CompleteDialog?.Invoke(command);
+                        }
+                    });
+```
+
+The above code will still immediately "complete" the dialog, but you can see how you could instead call out to other functions to process the dialog, then call `Squiggle.Events.Commands.CompleteDialog?.Invoke(command)` elsewhere when finished (like when a player presses the "advance" button in a dialog UI).
+
+You can see more robust examples like this in the Unity package sample scenes.
 
 ## Multiple Commands
 Squiggle code can contain as many lines as you like, with a single command being on each line (read more here about what constitutes valid Squiggle source).
@@ -107,11 +127,7 @@ Speaker 2: Now Speaker 2 is talking.
 Speaker 3: And here's a word from Speaker 3.
 ";
 
-Squiggle.Core.Run(  squiggleText : testScript,
-                    dialogHandler : (command) => {
-                        // This will automatically complete the dialog
-                        Squiggle.Events.Commands.CompleteDialog?.Invoke(command);
-                    });
+Squiggle.Core.Run(testScript);
 ```
 
 ## Non-Dialog Commands
