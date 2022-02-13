@@ -11,4 +11,14 @@ namespace Squiggle
             CommandTrigger = commandStart;
         }
     }
+
+    [System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Property)]  
+    public class ArgAttribute : Attribute
+    {
+        public int ArgumentIndex {get; protected set;}
+        public ArgAttribute(int argIndex)
+        {
+            ArgumentIndex = argIndex;
+        }
+    }
 }

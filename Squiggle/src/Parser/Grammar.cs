@@ -40,7 +40,8 @@ namespace Squiggle.Parser
                 from commandParams in BigIdentifier.Many()
                 from close in CloseBracket.Token()
                 from endBuffer in LineEnd.Many()
-                select new SquiggleCommand(commandParams.ToArray());
+                select Internal.CreateCommandForCommandTrigger(commandParams.ToArray());
+                // select new SquiggleCommand(){Args = commandParams.ToArray()};
 		public static readonly Parser<Dialog> SpeakerText = 
                 from startBuffer in LineEnd.Many()
                 from lead in Parse.LetterOrDigit.AtLeastOnce().Text()
@@ -48,6 +49,6 @@ namespace Squiggle.Parser
                 from dialog in Parse.AnyChar.Until(LineEnd).Text()
                 from endBuffer in LineEnd.Many()
 
-                select new Dialog((lead+speaker),dialog);
+                select new Dialog(new Dialog.Data(){Speaker = (lead+speaker), Text = dialog});
     }
 }

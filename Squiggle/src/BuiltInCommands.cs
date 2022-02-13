@@ -14,13 +14,10 @@ namespace Squiggle.Commands
             public string Text; 
         }
         public Data DialogData;
-        public Dialog(string speaker, string dialog) : base(new string[]{speaker,dialog})
+        public Dialog(Data d)
         {
-            DialogData = new Data()
-            {
-                Speaker = speaker,
-                Text = dialog
-            };
+            DialogData = d;
+            Args = new string[]{d.Speaker,d.Text}; 
         }
         public override void Execute()
         {
@@ -43,11 +40,10 @@ namespace Squiggle.Commands
         
     }
 
-    [SquiggleCommand("timer")]
-    public class Timer : SquiggleCommand
+    [SquiggleCommand("wait")]
+    public class Wait : SquiggleCommand
     {
-        public int WaitMS => Int32.Parse(Args[1]);
-        public Timer(string[] args) : base(args){}
+        [Arg(1)] public int WaitMS;
         public override void Execute()
         {
             Thread.Sleep(WaitMS);
