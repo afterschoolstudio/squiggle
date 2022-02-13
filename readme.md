@@ -38,6 +38,7 @@ To get started in Unity, you can download the latest Unity package here.
 If you want to use Squiggle outside of Unity, you can directly download the DLLs here (Nuget coming soon).
 
 ## Unity Sample Scenes
+![Unity Sample Screenshot](img/unity-sample.png)
 The Unity packages contain sample scenes that you can use as a starting point for integrating Squiggle into your game, or as a template to copy for other projects.
 
 You'll find four example scenes in the project, each demonstrating a different way to load and execute Squiggle code:

@@ -620,9 +620,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A ScriptableObject containing Squiggle text is linked in the inspector
-    to the SquiggleScriptableObjectSample GameObject. When you click run, Squiggle
-    will read from that ScriptableObject and show you text below.
+  m_Text: Placeholder
 --- !u!222 &337963673
 CanvasRenderer:
   m_ObjectHideFlags: 0
