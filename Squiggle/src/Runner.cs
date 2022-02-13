@@ -47,7 +47,25 @@ namespace Squiggle
                 workingCommand.CommandExecutionComplete += OnCurrentCommandComplete;
                 Log($"Starting Execution for Command Type {workingCommand.GetType().Name} With Args: {workingCommand.Parsed}");
                 CommandExecutionStarted?.Invoke(workingCommand);
-                workingCommand.Execute();
+                if(!(workingCommand is Wait))
+                {
+                    Log("executing non wait command");
+                    workingCommand.Execute();
+                }
+                else
+                {
+                    Log("checking for wait override");
+                    if(options.WaitOverride == null)
+                    {
+                        Log("no wait override found");
+                        workingCommand.Execute();
+                    }
+                    else
+                    {
+                        Log("found wait override, invoking");
+                        options.WaitOverride?.Invoke(workingCommand as Wait);
+                    }
+                }
             }
         }
 
@@ -68,7 +86,26 @@ namespace Squiggle
                 workingCommand.CommandExecutionComplete += OnCurrentCommandComplete;
                 Log($"Starting Execution for Command Type {workingCommand.GetType().Name} With Args: {workingCommand.Parsed}");
                 //execute the command
-                workingCommand.Execute();
+                if(!(workingCommand is Wait))
+                {
+                    Log("executing non wait command");
+                    workingCommand.Execute();
+                }
+                else
+                {
+                    Log("checking for wait override");
+                    if(options.WaitOverride == null)
+                    {
+                        Log("no wait override found");
+                        workingCommand.Execute();
+                    }
+                    else
+                    {
+                        Log("found wait override, invoking");
+                        options.WaitOverride?.Invoke(workingCommand as Wait);
+                    }
+                }
+
             }
         }
 
@@ -109,6 +146,7 @@ namespace Squiggle
             public bool Debug = false;
             public Action<Squiggle.Commands.Dialog> DialogHandler = (command) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);};
             public Action<string> LogHandler = null;
+            public Action<Wait> WaitOverride = null;
         }
     }
 }

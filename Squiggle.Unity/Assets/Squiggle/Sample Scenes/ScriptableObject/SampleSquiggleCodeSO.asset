@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dc56b56ecd4194e9e7c8187c1eb795, type: 3}
+  m_Name: SampleSquiggleCodeSO
+  m_EditorClassIdentifier: 
+  SquiggleText: 'Speaker: Hello! I''m going to wait 1 second.
+
+    [wait 1000]
+
+    Speaker:
+    Now that I''ve waited a second, I''ll wait 2.
+
+    [wait 2000]
+
+    Speaker:
+    I''m done now and will clear in 1 second.
+
+    [wait 1000]'

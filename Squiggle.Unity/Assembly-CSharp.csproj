@@ -36,6 +36,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Squiggle\Sample Scenes\ScriptableObject\ScriptableObjectSample.cs" />
+     <Compile Include="Assets\Squiggle\Sample Scenes\ScriptableObject\SquiggleScriptableObject.cs" />
      <Compile Include="Assets\Squiggle\Sample Scenes\TextBox\SquiggleTextBoxSample.cs" />
      <None Include="Assets\StreamingAssets\sampleSquiggleScript.txt" />
     <Reference Include="UnityEngine">
