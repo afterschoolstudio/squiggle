@@ -158,7 +158,42 @@ Speaker: Now afer a second I'm speaking again
 Squiggle.Core.Run(testScript);
 ```
 
-The code above will wait for 1 second, execute the first speaker text, wait another second and execute the second speaker text, then wait another second and end the execution of the code. 
+The code above will wait for 1 second, execute the first speaker text, wait another second and execute the second speaker text, then wait another second and end the execution of the code.
+
+**If you're using Unity, you'll also need to specify a wait override callback function in the options**:
+
+```cs
+using Squiggle;
+
+string myScript = @"
+[wait 1000]
+Speaker: I've waited 1 second to start speaking
+[wait 1000]
+Speaker: Now afer a second I'm speaking again
+[wait 1000]
+";
+
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(  squiggleText : myScript,
+                    runnerOptions : new Squiggle.Runner.Options(){
+                        Debug = true,
+                        WaitOverride = (command) => StartCoroutine(WaitMs(command))
+                        LogHandler = (text) => {Debug.Log(text)},
+                        DialogHandler : (command) => {
+                            // This will automatically complete the dialog
+                            Squiggle.Events.Commands.CompleteDialog?.Invoke(command);
+                        }
+                    });
+
+IEnumerator WaitMs(Squiggle.Commands.Wait waitCommand)
+{
+    yield return new WaitForSeconds(waitCommand.WaitMS / 1000f);
+    waitCommand.CommandExecutionComplete?.Invoke();
+}
+```
+
+For more on async/syncronous execution of Squiggle, see the wiki page here.
+
 
 ### Custom Commands
 Squiggle's flexibility lies in its ease of authoring custom behaviour to tie into from scripts. To learn about custom command authoring, view the wiki page here.
