@@ -12,8 +12,13 @@ Final: And Now I'm Here
 ";
 
 
-Squiggle.Core.Run(testScript,new Squiggle.Runner.Options(){Debug = true});
+// Squiggle.Core.Run(squiggleText : testScript,
+//                   runnerOptions : new Squiggle.Runner.Options(){Debug = true},
+//                   dialogHandler : (command) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);});
 
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(  squiggleText : myScript,
+                    runnerOptions : new Squiggle.Runner.Options(){Debug = true});
 [SquiggleCommand("sampleCustom")]
 public class SampleCustom : SquiggleCommand
 {

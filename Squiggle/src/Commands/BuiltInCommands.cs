@@ -8,21 +8,18 @@ namespace Squiggle.Commands
     //speaker commands are used directly by the parser, no need for attribute
     public class Dialog : SquiggleCommand
     {
-        public class Data
+        public string Speaker; 
+        public string Text; 
+        public Dialog(string speaker, string text)
         {
-            public string Speaker; 
-            public string Text; 
-        }
-        public Data DialogData;
-        public Dialog(Data d)
-        {
-            DialogData = d;
-            Args = new string[]{d.Speaker,d.Text}; 
+            Speaker = speaker;
+            Text = text;
+            Args = new string[]{Speaker,Text}; 
         }
         public override void Execute()
         {
             Squiggle.Events.Commands.CompleteDialog += OnDialogComplete;
-            Squiggle.Events.Dialog.EmitDialog?.Invoke(this,DialogData);
+            Squiggle.Events.Dialog.EmitDialog?.Invoke(this);
         }
 
         void OnDialogComplete(Dialog dialogCommand)

@@ -49,6 +49,6 @@ namespace Squiggle.Parser
                 from dialog in Parse.AnyChar.Until(LineEnd).Text()
                 from endBuffer in LineEnd.Many()
 
-                select new Dialog(new Dialog.Data(){Speaker = (lead+speaker), Text = dialog});
+                select new Dialog(lead+speaker,dialog);
     }
 }

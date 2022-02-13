@@ -17,20 +17,20 @@ namespace Squiggle
         public Action CompletedExecution;
         public Action<SquiggleCommand> CommandExecutionStarted;
         public Action<SquiggleCommand> CommandExecutionCompleted;
-        Action<Squiggle.Commands.Dialog,Squiggle.Commands.Dialog.Data> DialogHandler;
-        public Runner(List<SquiggleCommand> commands, Options opts, Action<Squiggle.Commands.Dialog,Squiggle.Commands.Dialog.Data> dialogHandler = null)
+        Action<Squiggle.Commands.Dialog> DialogHandler;
+        public Runner(List<SquiggleCommand> commands, Options runnerOptions, Action<Squiggle.Commands.Dialog> dialogHandler = null)
         {
             GUID = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
             this.commands = commands;
-            options = opts;
+            options = runnerOptions;
             DialogHandler = dialogHandler;
             if(DialogHandler == null)
             {
-                DialogHandler = (command,data) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);};
+                DialogHandler = (command) => {Squiggle.Events.Commands.CompleteDialog?.Invoke(command);};
             }
             Squiggle.Events.Dialog.EmitDialog += DialogHandler;
             
-            if(opts.AutoStart)
+            if(runnerOptions.AutoStart)
             {
                 Start();
             }

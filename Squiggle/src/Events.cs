@@ -10,7 +10,6 @@ namespace Squiggle.Events
     }
     internal static class Dialog
     {
-        internal static Action<DialogCommand,DialogCommand.Data> EmitDialog;
-
+        internal static Action<DialogCommand> EmitDialog;
     }
 }

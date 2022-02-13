@@ -1,8 +1,8 @@
-![Squiggle Wordmark](img/squiggle-blue.png)
+![Squiggle Wordmark](img/squiggle-blue-long.png)
 
 ---
   
-Squiggle ("**S**uper **Q**uick **G**ame **L**anguage") is a simple scripting language (and runtime parser) built for use inside of any C# game engine or framework (Unity, Monogame, etc.). With minimal setup, you easily start authoring custom dialog and commands for use in your game.
+Squiggle ("**S**uper **Q**uick **G**ame **L**anguage") is a simple scripting language and runtime parser built for use inside of any C# game engine or framework (Unity, Monogame, etc.). With very little setup, you can easily get started adding custom dialog scripts and commands to your game.
 
 Here's an example:
 ```
@@ -13,136 +13,10 @@ Carol: And I've brought something special!
 [setLights dim]
 ```
 
-If you're familar with tools like Yarn or Twine, Squiggle is something of a "lite" version of those. It offers a subset of their features, but trades feature parity for ultimate flexibility in order to be as quick and simple as possible.
+If you're familar with tools like [Yarn](https://yarnspinner.dev/) or [Twine](https://twinery.org/), Squiggle is "lite" version of those tool. It trades their robust feature sets for ultimate flexibility in order to be as quick and simple as possible.
 
-Note: Squiggle is *not* a replacement for C# code in your game. Instead, it provides a way for you to interact with code you've already written. This also means that Squiggle is slighly more advanced — you get less "out of the box" but can customize it to your needs, but you will need to be comfortable with code to use it.
-
-If instead you're looking for an easy-to-use, plug-and-play dialog system, I highly recommend looking into either Yarn, Twine, or Ink! However, if you've read the above and are still interested, keep reading for an overview of the tool and how to get started using it!
-
-# Overview
-For information on getting started, jump to the Getting Started section below.
-
-Squiggle is two primary things:
-* A *very* basic scripting language
-* A way to read and run the language at runtime.
-
-## Squiggle "language"
-Squiggle has two main concepts - `lines` and `commands`.
-
-### Lines
-Squiggle code is broken into lines, with each line holding one command.
-```
-Speaker: Hello, I'm on a line.
-Speaker 2: Hello, I'm on another line!
-```
-Squiggle code is executed line by line, top to bottom, with each line holding a single command. Note that there are no semicolons to end lines. 
-
-#### Valid Squiggle
-The **only** thing Squiggle *really* cares about is that the data you pass in *must* be seperated with `new line` characters. You get this "for free" if you're loading text from a file, but for strings, make sure your lines are seperated (insert `\n` at the end of your line).
-
-### Commands
-Each line of Squiggle is considered to be a `command`. Squiggle supports two types of commands out of the box - Dialog and Custom.
-
-Squiggle text can be composed of as many command types as you like, freely mixing them with each other:
-```
-[playSound chime 1]
-Speaker: Hello! Thanks for visiting!
-[playSound chime 2]
-Another Speaker: There's the bell, time to go!
-[playSound chime 3]
-[playSound endDialog]
-```
-
-#### Dialog Commands
-Dialog in Squiggle consists of two components, a "speaker" and their actual dialog. These two components are seperated by a colon (`:`).
-
-Here's an example:
-```
-Fran: Hello! My name is Fran.
-```
-When run through Squiggle, Squiggle will extract `Fran` as the "speaker" and `Hello! My name is Fran.` as their dialog. Dialog commands make it easy to get setup with Squiggle and validate that it's working in your game, and also provide a common use case for this type of tool out of the box.
-
-Commands give you a format to pass data from Squiggle source to your game, but what you do with this information is up to you. Squiggle just ensures everything is given to you correctly and at the right time.
-
-#### Custom Commands
-While dialog commands are useful for simple back and forth dialog between characters (or your own inner voice), Squiggle also exposes a way to call arbitrary commands in your game, from Squigle code.
-
-Here's an example (this will work out of the box):
-```
-[debug logState]
-```
-This command will instruct Squiggle to find the command tagged `debug` and pass it the argument `logState` (more on this later).
-
-Custom commands in Squiggle have two major parts, and the actual command name, followed by arguments to pass to that command.
-* Calling a command must start with a `[` and end with a `]`.
-* The first part of the command has to be the proper tagged command name (more on this later)
-* Arguments are seperated by a space, meaning all arguments have to be a single "word"
-
-Commands can contain as many arguments as you like:
-```
-[setSound mysoundname play 2]
-```
-This command will instruct Squiggle to find the command tagged `setSound` and pass it the argument `mysoundname`, `play`, and `2`.
-
-### Squiggle "Source"/"Scripts" Format
-A major benefit of Squiggle is that it *does not care* how it recieves text, meaning any collection of text is a possible valid Squiggle file. This means you can feed it text in any way you see fit:
-* Load text from file
-* Pass it the contents of a `string` in your game
-* Link it up to a `Text` component in Unity
-* Read from server
-* etc.
-
-## Squiggle Runner
-Squiggle ships with a "Runner" that will attempt to execute anything you send to it as Squiggle code. Each passed in script will be executed line by line, from top to bottom. 
-
-The "runner" gives you a lot of freedom to decide when processing a line/command is "done", so you can easily block execution of lines in a script if need be. Once you're done, Squiggle will resume. See more on this below in the Getting Started section.
-
-# Getting Started
-To get started in Unity, you can download the latest Unity package here.
-
-The package consists of two primiary things:
-* The Squiggle DLL
-* Sample Unity Scenes
-
-If you want to use Squiggle outside of Unity, you can directly download the DLL here.
-
-## Unity Sample Scenes
-To get a better sense of what you can do with Squiggle, the Unity package ships with some sample scenes that you can use as a starting point for integrating Squiggle into your game, or as a template to copy for other projects.
-
-You'll find four example scenes in the project, each demonstrating a different way to load and execute Squiggle code:
-* Input Text Box - Write and execute Squiggle directly in play mode
-* Monobehaviour - Write squiggle in a public monobeahvior string field
-* Scriptable Object - Author squiggle in an SO
-* Streaming Assets - Load a squiggle file from StreamingAssets
-
-The code samples in each of these scenes show you how you can author Squiggle code and run it at runtime, and also provides samples to show you how you can tie into execution of the runner.
-
-# Guide
-
-## Absolute Basics
-Squiggle works primarily in an event-driven, command pattern style execution. Wrapping your head around that may be difficult if you're coming purely from Unity update-loop centric development, but we promise you'll be fine.
-
-With that said, there are only a few Squiggle events that you really need to care about:
-* `CommandExecutionComplete`
-
-## Basic Dialog
-If you only want to use Squiggle for a dialog system, all you need to do is listen to Squiggle's static `OnNewDialogCommand` action
-The most basic implementation of Squiggle in your code requires only one thing: telling 
-Working with Squiggle requires really only one thing, which is knowledge of how C# `Actions` work. When a Squiggle command executes, you (the implementer) decides what that execution means by a
-
-## Listening For Commands
-Squiggle's runner is an idomatic implementation of the Command Pattern. Squiggle Commands themselves are commands that get executed, and require some specific overrides.
-
-Namely, this comes in in figuring out when a command is "done", that way the Runner can continue execution for the next line. Squiggle gives you a default timer buffer if a command has no callback, but we expect that for any non-trivial use of Squiggle, you'll hook into your own events. Here's how that works.
-
-### Speaker Command Callbacks
-
-
-### Custom Command Signature
-
-
-# Use Cases
-While Squiggle was primarily designed as a dialog tool, you can think of it a *bit* like a code calling "playbook". From this lens, you can see how it could be used for many other use cases:
+## Use Cases
+While Squiggle was primarily designed as a light scripting/dialog tool, you can think of it a *bit* like a code calling "playbook". From this lens, you can see how it could be used for many other use cases:
 
 * Dialog Systems
 * AI Routines
@@ -150,56 +24,132 @@ While Squiggle was primarily designed as a dialog tool, you can think of it a *b
 * Build Instructions
 * etc.
 
-# Why
-See the section below on comparisons to other prominent dialog editors for Unity.
+Note: Squiggle is *not* a replacement for C# code in your game. Instead, it provides a way for you to interact with code you've already written. This also means that Squiggle is slighly more advanced that the aforementiond tools — you get less "out of the box" but can easily customize to your needs.
 
-For Cantata, we had a few primary needs:
-* The game has a built-in editor, and we wanted the ability to author working dialog at runtime
-* We needed the ability to load in arbitary scripts from source files
-* We needed the ability to inject commands in the dialog flow
+If instead you're looking for an easy-to-use, plug-and-play dialog system, I highly recommend looking into either [Yarn](https://yarnspinner.dev/), [Twine](https://twinery.org/), or [Ink](https://www.inklestudios.com/ink/)! However, if you've read the above and are still interested, keep reading for an overview of Squiggle and how to get started using it!
 
-The needs of the first bullet there meant that Yarn, Twine, Ink, etc. were all not possible. Even if those were available, we wanted a solution that was a bit more spartan — we didn't want to defer control flow to a tool we didn't know the internals of, and wanted all the internal execution of the code be easy to follow and hook into.
+# Getting Started
+To get started in Unity, you can download the latest Unity package here.
 
-With this, Squiggle was born.
+If you want to use Squiggle outside of Unity, you can directly download the DLLs here (Nuget coming soon).
 
-## VS. Twine/Yarn
+## Unity Sample Scenes
+The Unity packages contain sample scenes that you can use as a starting point for integrating Squiggle into your game, or as a template to copy for other projects.
 
-variables
-branching
-built-in display
-runtime authoring (no compile)
-agnostic "runner"
+You'll find four example scenes in the project, each demonstrating a different way to load and execute Squiggle code:
+* Input Text Box - Write and execute Squiggle directly in play mode
+* Monobehaviour - Write squiggle in a public monobeahvior string field
+* Scriptable Object - Author squiggle in a ScriptableObject
+* Streaming Assets - Load a squiggle file from StreamingAssets
 
-It's worth saying that when this project was started, the new version of Yarn wasn't yet out. In reviewing it recently, it's come very far since the version of Yarn that was previously available and is much close to what Squiggle offers now.
+## Absolute Basics
 
-# Event Flow
-Runner gets a new command
-Runners passes command to function
-Runner waits to hear CommandExecutionComplete from command
+Squiggle code is a collection of `commands`, with **one** command on each line. The simplest command is a Dialog Command, which looks like this:
 
-# Authoring Commands
-While you get Speaker commands for free, custom commands will likely be the main source of any code your write to support your Squiggle scripts.
-
-With that in mind, let's write a command!
 ```
-[doSomething setMood happy 3]
-```
-Commands point to code that you've written in your own game in order to handle the commands. Squiggle doesn't ship with any commands by default. Here's a sample command:
-```c#
-[SquiggleCommand("doSomething")]
-public class DoSomethingCommand : SquiggleCommand
-{
-    public string FMODEventPath => GetConstPathOrFMODPath(Args[1]);
-    public DoSomethingCommand(string[] args) : base(args){}
-    public override void Execute()
-    {
-        //handle your command logic here
-        GameManager.AudioManager.PlayOneShotFromFMODPath(FMODEventPath);
-        CommandExecutionComplete?.Invoke();
-    }
-}
+Speaker: Hello! The Speaker is talking!
 ```
 
+You can pass this to Squiggle by calling a single function:
+```cs
+using Squiggle;
 
-## What it is
-Command parsing with Sprache + Command Pattern + Reflection
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(myScript);
+```
+The above code will read the text in `myScript` as Squiggle code and attempt to execute it. Squiggle will see that someone name `Speaker` is talking, and they are saying `Hello! The Speaker is talking!`.
+
+If you use the above code, the code will run and then immediately exit. This may not be desireable, as you'll likely want to "catch" the dialog, and handle it somewhere else in your code. You can specify a dialog callback with the `dialogHandler` parameter to handle dialog when running Squiggle code to achieve this:
+
+```cs
+using Squiggle;
+
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(  squiggleText : myScript,
+                    dialogHandler : (command) => {
+                        // This will automatically complete the dialog
+                        Squiggle.Events.Commands.CompleteDialog?.Invoke(command);
+                    });
+```
+
+The above code will still immediately "complete" the dialog, but you can see how you could instead call out to other functions to process the dialog, then call `Squiggle.Events.Commands.CompleteDialog?.Invoke(command)` elsewhere when finished (like when a player presses the "advance" button in a dialog UI).
+
+You can see more robust examples like this in the Unity package sample scenes.
+
+## Runner Options
+You may want to debug your Squiggle execution when you are first getting setup. Squiggle provides an easy route to do this by specifying `runnerOptions` when you execute Squiggle and setting the `Debug` value to `true`:
+
+```cs
+using Squiggle;
+
+string myScript = "Speaker: Hello! The Speaker is talking!";
+Squiggle.Core.Run(  squiggleText : myScript,
+                    runnerOptions : new Squiggle.Runner.Options(){Debug = true});
+```
+
+This will print something similar to this in the console:
+```
+Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Beginning Runner Execution With 1 Commands
+Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Starting Execution for Command Type Dialog With Args: (0)Speaker (1)Hello! The Speaker is talking!  
+Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Completed Execution for Command Type Dialog With Args: (0)Speaker (1)Hello! The Speaker is talking! 
+Squiggle Runner J+NeBhab4UGr6GBTW9BBBQ==: Execution Complete, Exiting
+```
+
+## Multiple Commands
+Squiggle code can contain as many lines as you like, with a single command being on each line (read more here about what constitutes valid Squiggle source).
+
+```cs
+using Squiggle;
+
+string myScript = @"
+Speaker: Hello! The Speaker is talking!
+Speaker 2: Now Speaker 2 is talking.
+Speaker 3: And here's a word from Speaker 3.
+";
+
+Squiggle.Core.Run(  squiggleText : testScript,
+                    dialogHandler : (command) => {
+                        // This will automatically complete the dialog
+                        Squiggle.Events.Commands.CompleteDialog?.Invoke(command);
+                    });
+```
+
+## Non-Dialog Commands
+In addition to Dialog, Squiggle gives you the ability to call other types of commands inside of your scripts.
+
+Non-Dialog commands take the form:
+```
+[commandName commandArgument1]
+```
+`commandName` above is the name of the command, and `commandArgument1` is an argument to pass to that command. Squiggle ships with a small set of commands that provide some utility for script execution:
+
+### Wait
+You can call the `wait` command in your scripts to pause execution of the script from some number of milliseconds:
+
+```cs
+using Squiggle;
+
+string myScript = @"
+[wait 1000]
+Speaker: I've waited 1 second to start speaking
+[wait 1000]
+Speaker: Now afer a second I'm speaking again
+[wait 1000]
+";
+
+Squiggle.Core.Run(testScript);
+```
+
+The code above will wait for 1 second, execute the first speaker text, wait another second and execute the second speaker text, then wait another second and end the execution of the code. 
+
+### Custom Commands
+Squiggle's flexibility lies in its ease of authoring custom behaviour to tie into from scripts. To learn about custom command authoring, view the wiki page here.
+
+## Documentation
+For a deeper dive on Squiggle's features and operation, view the wiki here. In it you can find:
+* General Squiggle Overview
+* Instructions for custom command authoring
+* Comparison to Yarn
+* Command Execution Control
+
+
