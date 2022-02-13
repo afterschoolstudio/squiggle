@@ -1,13 +1,16 @@
 ﻿using Squiggle;
 using Squiggle.Commands;
 
-string testScript = @"Test: Hello, I'm speaking
+string testScript = @"
+Test: Hello, I'm speaking
 [timer 1000]
+
 Another: Now It's me
 [timer 1000]
 Another: Here's a sample command
 [sampleCustom someArgForACustomCommand]
-Final: And Now I'm Here";
+Final: And Now I'm Here
+";
 
 
 Squiggle.Core.Run(testScript,new Squiggle.Runner.Options(){Debug = true});

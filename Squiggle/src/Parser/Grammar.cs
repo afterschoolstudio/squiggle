@@ -19,7 +19,9 @@ namespace Squiggle.Parser
         static readonly Parser<string> Line = LiteralLineContent.AtLeastOnce().Text();
         static readonly Parser<IEnumerable<char>> LineEnd = Parse.LineEnd.XOr(Parse.LineTerminator).XOr(Parse.String("\\r\\n")).XOr(Parse.String("\\n")).XOr(Parse.String("\n")).XOr(Parse.String("\r\n"));
         public static readonly Parser<SquiggleCommandGroup> Commands =
+            from introLines in LineEnd.Many()
             from commands in Parse.Ref(()=>SpeakerText).XOr(Parse.Ref(() => Instruction)).Many()
+            from outroLines in LineEnd.Many()
             select new SquiggleCommandGroup(commands);
 		public static readonly Parser<string> CommandParameter = 
                 (from content in Parse.CharExcept(' ').Until(Parse.LineTerminator).Text()
@@ -33,15 +35,18 @@ namespace Squiggle.Parser
 		public static readonly Parser<char> OpenBracket = Parse.Char('[');
 		public static readonly Parser<char> CloseBracket = Parse.Char(']');
 		public static readonly Parser<SquiggleCommand> Instruction = 
-                from open in Parse.Char('[').AtLeastOnce().Token()
+                from startBuffer in LineEnd.Many()
+                from open in OpenBracket.AtLeastOnce().Token()
                 from commandParams in BigIdentifier.Many()
-                from close in Parse.Char(']').Token()
-                from end in LineEnd
+                from close in CloseBracket.Token()
+                from endBuffer in LineEnd.Many()
                 select new SquiggleCommand(commandParams.ToArray());
 		public static readonly Parser<Dialog> SpeakerText = 
+                from startBuffer in LineEnd.Many()
                 from lead in Parse.LetterOrDigit.AtLeastOnce().Text()
                 from speaker in Parse.AnyChar.Until(Colon).Token().Text()
                 from dialog in Parse.AnyChar.Until(LineEnd).Text()
+                from endBuffer in LineEnd.Many()
 
                 select new Dialog((lead+speaker),dialog);
     }
